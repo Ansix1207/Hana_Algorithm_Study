@@ -1,0 +1,125 @@
+// 백준_골드4_1707번_이분그래프
+
+/*
+풀이> 
+전체적으로 BFS로 풀이했으나
+본 문제에서는
+1. 이분 그래프에 대한 이해
+2. 메모리 초과를 고려한 코드 구조
+3. 비연결 그래프일경우를 고려한 코드 구조 (BFS 여러번 진입)
+
+위 세 가지를 고려하고 나서야 해결할 수 있었다.
+*/
+
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<string>
+
+using namespace std;
+
+int V, E;
+
+int bfs(vector<vector<int>>vec, int* visit, int idx, int V) {
+	queue<int> que;
+
+	que.push(idx);
+	visit[idx] = 1;
+
+	while (!que.empty()) {
+		int tmp = que.front();
+		int color;
+		que.pop();
+
+		if (visit[tmp] == 1) {
+			color = 2;
+		}
+		else {
+			color = 1;
+		}
+
+		for (int i = 0; i < vec[tmp].size(); i++) {
+			if (visit[vec[tmp][i]] == 0) {
+				visit[vec[tmp][i]] = color;
+				que.push(vec[tmp][i]);
+			}
+			else {
+				if (visit[tmp] == visit[vec[tmp][i]]) {
+					return 1;
+				}
+			}
+
+		}
+	}
+
+	return 0;
+
+}
+
+void init_visit(int n, int* visit) {
+	for (int i = 0; i <= n; i++) {
+		visit[i] = 0;
+	}
+}
+
+int main() {
+
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
+	int K;
+	vector<string> sv;
+
+	cin >> K;
+
+	for (int i = 0; i < K; i++) {
+		int a, b;
+		int sol = 0;
+		cin >> V >> E;
+
+		// 방문체크와 색체크를 담당할 visit 배열을 V 크기로 동적할당
+		int* visit = new int[V + 1];
+		
+		init_visit(V, visit);
+		
+		vector<int> v;
+		
+		vector<vector<int>> vec(V+1,v);
+
+		// 메모리를 줄이기 위해 V*V크기로 하지않고 V*가변 크기로 지정
+		// 각 상위배열에는 간선이 있는경우만 추가해주었다.
+		for (int j = 1; j <= E; j++) {
+			cin >> a >> b;
+			vec[a].push_back(b);
+			vec[b].push_back(a);
+		}
+
+		// 비연결 그래프인 경우에도 모두 탐색할 수 있도록 
+		for (int j = 1; j <= V; j++) {
+			// 방문하지 않은 노드가 있을때만 bfs를 다시 진행하도록 하여 복잡도를 줄임
+			if (visit[j] == 0) {
+				// bfs의 반환값이 1, 즉, 이분그래프가 아닌경우 sol=1로 지정후 테케 종료
+				if (bfs(vec, visit, j, V) == 1) {
+					sol = 1;
+					break;
+				}
+			}
+		}
+
+		if (sol == 0) {
+			sv.push_back("YES");
+		}
+		else {
+			sv.push_back("NO");
+		}
+		delete[] visit;
+	}
+
+	for (int i = 0; i < sv.size(); i++) {
+		cout << sv[i] << '\n';
+	}
+
+
+	return 0;
+}

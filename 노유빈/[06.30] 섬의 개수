@@ -1,0 +1,63 @@
+# for 문 안에 0으로 초기화 해주는 로직 구현 후 시간 초과 해결함
+
+import sys
+from collections import deque
+
+def bfs(a,b):
+
+    dx = [1,-1,0,0,1,1,-1,-1]
+    dy = [0,0,1,-1,1,-1,1,-1]
+
+    queue = deque()
+    queue.append([a,b])
+    
+
+    while queue:
+        
+        x,y = queue.popleft()
+
+        k[x][y] = 0
+
+
+        for i in range(8):
+            
+            temp_x = x + dx[i]
+            temp_y = y + dy[i]
+
+            if 0<=temp_x<h and 0<=temp_y<w and k[temp_x][temp_y]==1:                
+                queue.append([temp_x,temp_y])
+                k[temp_x][temp_y]=0
+                
+                
+
+    return k
+
+    
+
+
+
+
+while True:
+
+    
+    w,h = list(map(int,sys.stdin.readline().split(" ")))
+
+    if w==0 and h==0:
+        break
+
+    k = [ ]
+
+    answer = 0    
+
+    for i in range(0,h):
+        k.append(list(map(int,sys.stdin.readline().split(" "))))
+
+    for n in range(0,h):
+        for m in range(0,w):
+            if k[n][m] == 1:
+                bfs(n,m)           
+                answer += 1
+                    
+    print(answer)
+    
+    

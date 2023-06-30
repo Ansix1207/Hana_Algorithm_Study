@@ -1,0 +1,81 @@
+
+# 저번에는 못풀던 문제인데 풀었습니다. 실력이 조금 늘었나봐요. y를 x라 해서 40분동안 고민했습니다.
+
+import sys
+from collections import deque
+
+# bfs 로 탐색 하기
+
+
+def bfs(k,q,w):
+
+    count = 1
+
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+
+    width = len(k)
+
+    queue = deque()
+    queue.append([q,w])
+
+    k[q][w] = 0
+
+    while queue:        
+
+        a,b = queue.popleft()        
+
+        for i in range(4):
+            temp_x = dx[i] + a
+            temp_y = dy[i] + b
+
+            if 0<=temp_x<width and 0<=temp_y<width and k[temp_x][temp_y] == 1:
+
+                k[temp_x][temp_y] = 0                
+                queue.append([temp_x,temp_y])                
+                
+                count+=1
+
+    
+    return count
+                
+            
+
+
+k = [ ]
+
+num = int(input())
+
+for i in range(num):
+    k.append(list(map(int,list(input()))))
+
+answer = [ ]
+
+for i in range(0,len(k)):
+    
+    for j in range(0,len(k)):
+
+        if k[i][j] == 1:
+
+            answer.append(bfs(k,i,j))
+
+            
+print(len(answer))
+
+
+answer = list(sorted(answer))
+for i in answer:
+    print(i)
+
+
+
+    
+
+
+
+
+
+
+    
+        
+    
