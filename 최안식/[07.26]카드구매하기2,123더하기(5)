@@ -1,0 +1,90 @@
+package BaekJoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class boj_15990_123더하기5 {
+    static final int VALUE = 1_000_000_009;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        long[][] dp = new long[100_001][4];
+        dp[1][1] = 1;
+        dp[2][2] = 1;
+        dp[3][1] = 1; //2+1
+        dp[3][2] = 1; //1+2
+        dp[3][3] = 1; //3
+        for (int i = 4; i <= 100_000; i++) {
+            //i는 현재 구하고싶은 수, j는 끝나는수 예를들어서 7은 6+1, 5+2, 4+3 으로 만들어질 수 있음.
+            // 123을 통해서 구하는거니까..
+            dp[i][1] = (dp[i-1][2] + dp[i-1][3])%VALUE; //이친구는 X + 끝자리 1 로 만들어질때.
+            dp[i][2] = (dp[i-2][1] + dp[i-2][3])%VALUE; // 이친구는 X+ 끝자리 2로 만들어질때.
+            dp[i][3] = (dp[i-3][1] + dp[i-3][2])%VALUE; //이친구는 x + 끝자리 3으로 만들어질때.
+            // 중복되면 안되니까 1 2or3 (1은 들어오면 안되기때문에 2,와 3의 값들을 더해서 값을 구한다.)
+        }
+
+        for (int i = 0; i < n; i++) {
+            int tc = Integer.parseInt(br.readLine());
+            System.out.println((dp[tc][1]+dp[tc][2]+dp[tc][3])%VALUE);
+        }
+    }
+}
+
+
+--------------------------------------
+
+package BaekJoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+// TODO: 2023/07/27 16194번 카드 구매하기 2 (실버1) https://www.acmicpc.net/problem/16194
+// TODO: 2023/07/27 성공~
+/**
+ * p1 = 1, p2 = 5, p3 = 6, p4 = 7 일때
+ * dp[1] = 1개인거 선택 = 1 (가지)
+ *  dp[2] = dp[1] + p[1](1인거) = 2
+ *  ...   = p[2](2개 들어있는거)  =5 (O)<-이거 선택된다. max 이용해서
+ *
+ *  dp[3] = dp[1] + p[2] = 6   for문 두개를 돌아야 하는데 i , j
+ *        = dp[2] + p[1] = 6    for 1~n 까지 i
+ *        = p[3]         = 6        for 1~i 까지 j
+ *                           식은 ->   dp[i]  =  MAX ( dp[i-j] + t[j], dp[i] )
+ *                                      i=3, j=1 일때 dp[3-1] + t[1], dp[1]
+ *                                      i=3 , j=2 일때 do[3-2] + t[2] , dp[2]
+ *
+ *
+ * 1장짜리 카드팩부터 n-1장의 카드팩까지 고르면서 고르는 방식은 다음과 같다.
+ * dp[i] = dp[i-j] + t[j] 와 dp[i] <- 초기값 과 비교해서
+ * 어느것이 min value 인지를 확인해서 그전 dp 테이블에 저장한다.
+ * dp[4] = dp[3] + t[1] , dp[2] + t[2] , dp[1] + t[3] , t[4] 4개의 값들중 최소값으로
+ * 저장하는 것이 핵심이다.
+ * 앞의 dp[1]. dp[2], dp[3] 들은 같은 원리로 최소값을 저장해놨기 때문이다.
+ */
+public class boj_16194_카드구매하기2 {
+private static String[] sarr;
+static int max = Integer.MIN_VALUE;
+
+public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int n = Integer.parseInt(br.readLine());
+    int[] dp = new int[n + 1];
+    int[] dt = new int[n + 1];
+    sarr = br.readLine().split(" ");
+    for (int i = 1; i < n + 1; i++) {
+        dt[i] = Integer.parseInt(sarr[i - 1]);
+        dp[i] = dt[i];
+    }
+
+    dp[1] = dt[1];
+    for (int i = 1; i < n + 1; i++) {
+        for (int j = 1; j <= i; j++) {
+            dp[i] = Math.min(dp[i - j] + dt[j], dp[i]);
+        }
+    }
+    System.out.println(dp[n]);
+}
+}

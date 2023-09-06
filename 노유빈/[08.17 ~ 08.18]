@@ -1,0 +1,141 @@
+# 같은 숫자는 싫어
+
+# 설명할게 딱히 없다
+
+def solution(arr):
+    answer = []
+    
+    for i in range(0,len(arr)-1):
+        if arr[i]!=arr[i+1]:
+            answer.append(arr[i])
+    answer.append(arr[-1])
+    return answer
+
+
+
+
+
+# 기능 개발
+
+# 풀 때마다 테스트 케이스에서 헤맸다.
+# k[i+1] = k[i] 로 초기화 시켜 해결을 했다.
+
+import math
+
+def solution(progresses, speeds):
+    answer = []
+    
+    k = [ ]
+    
+    for i in range(0,len(progresses)):
+        k.append(math.ceil((100-progresses[i])/speeds[i]))
+    
+    count = 1
+    
+    index = 0
+    
+    for i in range(0,len(k)-1):
+        
+                 
+        if k[i]>=k[i+1]:
+            count+=1
+            k[i+1]= k[i]
+        else:
+            answer.append(count)
+            count = 1
+    
+    
+    if index >= k[-1]:
+        
+        answer[-1]+=1
+    else:
+        answer.append(count)
+    return answer
+    
+
+
+
+
+
+
+
+# 베스트 앨범
+
+
+# 문제 이해를 처음에 잘못했지만 문제를 다시 이해하고 풀었다.
+# 구현 문제 처럼 풀었다.
+
+
+
+def solution(genres, plays):
+    answer = []
+    
+    # 가장 많이 들은 순으로 정렬
+    
+    temp = [ ]
+    
+    sums = [ ]
+    
+    for i in range(0,len(genres)):
+        
+        # 없으면 최댓값 구하기
+        
+        if genres[i] not in temp:
+            
+            count = 0
+            
+            for j in range(0,len(genres)):
+                
+                if genres[j] == genres[i]:
+                    
+                    count += plays[j]
+            
+            temp.append(genres[i])
+            sums.append([genres[i],count])
+            
+            count = 0
+                    
+    sums = list(reversed(list(sorted(sums,key = lambda x:x[1]))))               
+            
+    # 각 장르별로 최대 두개 씩 고르기
+    
+    m = [ ]
+    
+    for i in range(0,len(sums)):
+        
+        for j in range(0,len(genres)):
+            
+            if sums[i][0] == genres[j]:
+                
+                m.append([plays[j],j])
+    
+        m = list(sorted(m,key = lambda x:(-x[0],x[1])))
+        
+        
+        
+        if len(m)==1:
+            answer.append(m[0][1])
+        else:
+            answer.append(m[0][1])
+            answer.append(m[1][1])
+            
+        
+        m = [ ]
+    
+    
+    
+    
+                
+        
+        
+        
+        
+                
+                
+    return answer
+
+
+
+
+
+

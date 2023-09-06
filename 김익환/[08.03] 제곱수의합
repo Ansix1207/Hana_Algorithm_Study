@@ -1,0 +1,50 @@
+// 백준_실버2_1699번_DP_제곱수의합
+
+/*
+풀이>
+	점화식 : num*num == n 일때, dp[n] = 1
+			 아닐때,			dp[n] = min(dp[n], dp[a]+dp[n-a]) (a<= n/2 의 범위를 모두 체크) 
+
+
+*/
+
+#include<iostream>
+
+using namespace std;
+
+int dp[100001];
+
+int main() {
+
+	int N;
+	int now_num = 1;
+	int next_num = 2;
+
+	cin >> N;
+
+	fill_n(dp, N + 1, 10000);
+
+	dp[1] = 1;
+	dp[2] = 2;
+
+	for (int i = 3; i <= N; i++) {
+		if (next_num * next_num == i) {
+			dp[i] = 1;
+			now_num += 1;
+			next_num += 1;
+		}
+		else {
+			for (int j = 1; j <= i / 2; j++) {
+				if (dp[i] > dp[j] + dp[i - j]) {
+					dp[i] = dp[j] + dp[i - j];
+				}
+			}
+		}
+	}
+
+	cout << dp[N];
+
+
+
+	return 0;
+}

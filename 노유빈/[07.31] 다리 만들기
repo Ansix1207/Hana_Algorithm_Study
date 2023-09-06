@@ -1,0 +1,171 @@
+import sys
+from collections import deque
+
+input = sys.stdin.readline
+
+# 10%에서 메모리 초과 -> check 함수 내의 리스트 길이 때문인 것 같음.
+# 리스트에 넣는 것이 아닌 선언된 리스트를 이용해서 해결하는 방법을 알게 됌.
+
+
+# 각 섬을 2~n+1 까지의 숫자로 채우기
+
+def bfs(k,index,x,y):
+
+    # 시작 위치 x,y
+
+    queue = deque()
+
+    queue.append([x,y])
+
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+
+    while queue:
+        
+
+        a,b = queue.popleft()
+
+        k[a][b] = index
+
+        for i in range(4):
+            
+            temp_x = a + dx[i]
+            temp_y = b + dy[i]
+
+            if 0<=temp_x<len(k) and 0<=temp_y<len(k) and k[temp_x][temp_y] == 1:
+                queue.append([temp_x,temp_y])
+    
+        
+
+# BFS 돌면서 최단 값 찾기
+
+def check(k,i,j):
+
+    count = 0
+
+    queue = deque()
+
+    queue.append([i,j])
+
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+
+    compare = k[i][j]
+
+    temp = [ ]
+    
+    while queue:
+
+        a,b = queue.popleft()
+
+        for i in range(4):
+            
+            temp_x = a + dx[i]
+            temp_y = b + dy[i]
+
+            if 0<=temp_x<len(k) and 0<=temp_y<len(k):
+
+                # 다른 섬을 만났을 때
+                
+                if k[temp_x][temp_y]!=0 and k[temp_x][temp_y]!=compare:
+                    return count
+
+                else:
+
+                    # 이 부분이 문제
+                    
+                    if k[temp_x][temp_y]==0:
+                        temp.append([temp_x,temp_y])
+
+                   
+        if len(queue) == 0:
+            queue = deque(temp)
+            count += 1
+            temp = [ ]
+
+    
+            
+    return 1000000
+        
+    
+
+        
+    
+
+
+# 0은 바다, 1은 육지
+
+
+n = int(input())
+
+k = [ ]
+
+for i in range(n):
+    k.append(list(map(int,input().split(" "))))
+
+
+
+index = 2
+
+for i in range(0,len(k)):
+    for j in range(0,len(k)):
+        if k[i][j] == 1:
+            bfs(k,index,i,j)
+            index+=1
+
+
+
+# 각 섬의 모든 구간에서 다른 섬의 최솟값 구하기
+
+answer = 1000000
+
+for i in range(0,len(k)):
+    for j in range(0,len(k)):
+
+
+        if k[i][j] != 0:
+            answer= min((check(k,i,j),answer))
+
+print(answer)
+
+
+
+
+'''
+
+check 함수 정답 코드
+
+
+
+
+def bfs2(z):
+    global answer
+    dist = [[-1] * n for _ in range(n)] # 거리가 저장될 배열
+    q = deque()
+
+    for i in range(n):
+        for j in range(n):
+            if arr[i][j] == z:
+                q.append([i, j])
+                dist[i][j] = 0
+
+    while q:
+        x, y = q.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            # 갈 수 없는 곳이면 continue
+            if nx < 0 or nx >= n or ny < 0 or ny >= n:
+                continue
+            # 다른 땅을 만나면 기존 답과 비교하여 짧은 거리 선택
+            if arr[nx][ny] > 0 and arr[nx][ny] != z:
+                answer = min(answer, dist[x][y])
+                return
+            # 바다를 만나면 dist를 1씩 늘린다.
+            if arr[nx][ny] == 0 and dist[nx][ny] == -1:
+                dist[nx][ny] = dist[x][y] + 1
+                q.append([nx, ny])
+
+
+
+'''

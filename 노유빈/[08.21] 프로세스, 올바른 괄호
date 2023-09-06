@@ -1,0 +1,97 @@
+# 올바른 괄호
+
+#각 모양의 개수를 이용해서 품
+
+from collections import deque
+
+def solution(s):    
+    
+    count = 0
+    
+    if s.count('(') != s.count(')'):
+        return False
+    s = deque(s)
+    
+    
+    while True:
+        if len(s)==0:
+            break
+        
+        k = s.popleft()
+        
+        if k =="(":
+            count+=1
+        else:
+            count-=1
+        
+        if count<0:
+            return False
+    
+    return True
+
+
+
+
+
+
+
+
+
+
+
+
+# 프로세스
+
+# deque를 이용했고 2차원 리스트를 이용했다.
+
+from collections import deque
+
+def maxs(k):
+    
+    m = 0
+    
+    for i in range(0,len(k)):
+        if k[i][1]>m:
+            m = k[i][1]
+    
+    return m
+
+
+def solution(priorities, location):
+    answer = 1
+    
+    k = []
+    
+    for i in range(0,len(priorities)):
+        k.append([i,priorities[i]])
+    
+    k = deque(k)
+    # 번호/우선순위 순서    
+    
+    
+    while True:
+        
+        
+        temp = k[0]
+        
+        # 찾으면
+        
+        if temp[0] == location and temp[1] ==maxs(k):
+            print(k)
+            return answer        
+           
+                
+        # 찾는 건 아닌데 최대면
+        elif temp[0] != location and temp[1] ==maxs(k):
+            k.popleft()
+            answer+=1
+        
+        # 아무것도 아니면  
+        else:
+            k.append(k.popleft())
+        
+        
+        
+        
+    
+    return answer

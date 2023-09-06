@@ -1,0 +1,38 @@
+# 가장 긴 바이토닉 부분 수열
+
+# 아이디어만 힌트로 받고 풀어봤다. 가장 증가하는 수열을 고르고 가장 감소하는 수열을 고른 후 합의 최대를 구한다
+# 기존 리스트를 뒤집어 주어서 감소하는 수열을 만들고
+# 그 수열을 다시 뒤집어 주어서 구한다
+# 머리로는 이해되는데 손글씨로도 이해해봐야될듯
+
+n = int(input())
+
+k = list(map(int,input().split(" ")))
+
+answer = 0
+
+# 증가하는 수열
+a = [1]*len(k)
+
+# 감소하는 수열
+b = [1]*len(k)
+
+
+for i in range(0,len(a)):
+    for j in range(0,i):
+        if k[i]>k[j]:
+            a[i] = max(a[i],a[j]+1)
+
+k = list(reversed(k))
+
+for i in range(0,len(a)):
+    for j in range(0,i):
+        if k[i]>k[j]:
+            b[i] = max(b[i],b[j]+1)
+            
+b = list(reversed(b))
+
+for i in range(0,len(a)):
+    answer = max(answer,a[i]+b[i])
+
+print(answer-1)

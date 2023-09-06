@@ -1,0 +1,141 @@
+package BaekJoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class boj_16929_TwoDots {
+        static char[][] a;
+        static boolean[][] visited;
+        final static int dy[] = new int[]{1, -1, 0, 0};
+        final static int dx[] = new int[]{0, 0, 1, -1};
+        static int n, m;
+
+
+        public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            n = sc.nextInt();
+            m = sc.nextInt();
+            a = new char[n][m];
+            visited = new boolean[n][m];
+
+            for (int i = 0; i < n; ++i) {
+                a[i] = sc.next().toCharArray();
+            }
+            for (int i = 0; i < n; ++i)
+                for (int j = 0; j < m; ++j) {
+
+                    if (visited[i][j] ==  false) {
+                        boolean cand = dfs(i,j,-1,-1,a[i][j]);
+                        if(cand) {
+                            System.out.println("Yes");
+                            System.exit(0);
+                        }
+                    }
+                }
+            System.out.println("No");
+        }
+
+        static boolean dfs(int y, int x, int by, int bx, char alp) {
+
+            if (visited[y][x]) return true;
+
+            visited[y][x] = true;
+          //상하좌우 탐색
+            for (int k = 0; k < 4; ++k) {
+                int ny = y + dy[k];
+                int nx = x + dx[k];
+        //
+                if (!(0 <= ny && ny < n && 0 <= nx && nx < m)) continue;
+                if (a[ny][nx] != alp) continue;
+                if (ny == by && nx == bx) continue;
+
+                if(dfs(ny, nx, y, x, alp))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+
+
+=====================
+
+
+package BaekJoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+// TODO: 2023/07/05 7562번 나이트의 이동  https://www.acmicpc.net/problem/7562
+// TODO: 2023/07/05 !! 성공 !!
+public class boj_7562_나이트의이동 {
+    static int[][] map;
+    static int tc, tx, ty;
+    static int n, m, l;
+    static boolean[][] visited;
+//    static int[] dx = {-1, 1, 0, 0}; //x방향배열-상하
+//    static int[] dy = {0, 0, -1, 1}; //y방향배열-좌우
+
+    static int[] dx = {1,-1, -2,-2, 1,-1, 2,2}; //x방향배열-상하
+    static int[] dy = {-2,-2, -1,1, 2,2, 1,-1}; //y방향배열-좌우
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        tc = Integer.parseInt(br.readLine());
+        for (int k = 0; k < tc; k++) {
+            l = Integer.parseInt(br.readLine());
+            StringTokenizer stk = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(stk.nextToken());
+            int y = Integer.parseInt(stk.nextToken());
+            stk = new StringTokenizer(br.readLine());
+            tx = Integer.parseInt(stk.nextToken());
+            ty = Integer.parseInt(stk.nextToken());
+            map = new int[l][l];
+            visited = new boolean[l][l];
+            if(x==tx&&y==ty){
+                System.out.println(0);
+
+            }else{
+                //하 0,0으로 해놓고 왜 틀렸나 했네 하.. 실수하지 말자
+                visited[x][y] = true;
+                bfs(x, y, 0);
+            }
+        }
+    }
+
+    static void bfs(int sx, int sy, int level) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{sx, sy, level});
+        int fin = 0;
+        while (!q.isEmpty()) {
+            int now[] = q.poll();
+            int nx = now[0];
+            int ny = now[1];
+            int nlevel = now[2];
+            if (nx == tx && ny == ty) {
+                fin = nlevel;
+                break;
+            }
+            for (int i = 0; i < dx.length; i++) {
+                int nextX = nx + dx[i];
+                int nextY = ny + dy[i];
+                if (nextX < 0 || nextY < 0 || nextX >= l || nextY >= l)
+                    continue;
+                if(visited[nextX][nextY])
+                    continue;
+                q.add(new int[]{nextX, nextY, nlevel + 1});
+                visited[nextX][nextY] = true;
+            }
+        }
+        System.out.println(fin);
+    }
+}
+

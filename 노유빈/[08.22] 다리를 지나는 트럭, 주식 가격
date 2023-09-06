@@ -1,0 +1,124 @@
+# 주식 가격
+
+# 함수를 이용해서 해결하였다. count+=1을 해서 return 하는게 핵심이었다.
+
+
+def check(i,prices):
+    
+    count = 0
+    
+    for j in range(i+1,len(prices)):
+        if prices[j]>=prices[i]:
+            count+=1
+        else:
+            count+=1
+            return count
+    
+    return count
+
+def solution(prices):    
+    answer = []
+    
+    for i in range(0,len(prices)):
+        answer.append(check(i,prices))
+            
+            
+    
+    return answer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 다리를 지나는 트럭
+
+# 복잡하게 생각하다가 꼬여서 풀이 참고함. 
+
+from collections import deque
+
+def solution(length, weight, truck_weights):
+    answer = 0
+    
+    # 대기 트럭 deque
+    
+    k = deque(truck_weights)
+    
+    # 다리 위의 트럭 deque
+    
+    temp = deque()
+    
+    while True:
+        
+        print(temp)
+        
+        if len(k)==0:
+                
+            return answer+length
+        
+        else:
+            
+            # temp가 꽉 차 있으면
+            if len(temp) == length:
+                answer+=1
+                temp.popleft()
+                
+                
+            
+            else:
+                
+            # temp에 자리가 있는데 더 들어올 수 가 없을 때
+                
+                if sum(temp) + k[0] > weight:
+                    answer+=1
+                    temp.popleft()
+                    
+                    if sum(temp) + k[0] < weight:
+                        temp.append(k.popleft())
+                
+                else:
+                    # temp에 자리가 있고 더 들어올 수 있을때
+                    answer+=1
+                    temp.append(k.popleft())
+
+
+
+
+
+
+
+
+'''
+
+def solution(bridge_length, weight, truck_weights):
+    
+    answer = 0
+    bridge = [0 for _ in range(bridge_length)]
+    
+    while bridge:
+        
+        answer += 1
+        bridge.pop(0)
+        
+        if truck_weights:
+            if sum(bridge) + truck_weights[0] <= weight:            
+                t = truck_weights.pop(0)
+                bridge.append(t)
+            else:
+                bridge.append(0)
+                 
+         
+    return answer
+
+'''

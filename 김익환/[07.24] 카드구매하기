@@ -1,0 +1,59 @@
+// 백준_실버1_11052번_DP_카드구매하기
+
+/*
+1. "카드가 i개 포함된 카드팩의 가격은 Pi원" 의 데이터를 arr 동적 배열에 저장
+2. dp 동적배열에 arr 동적 배열 복사
+3. dp[1] = arr[1]; 로 설정
+4. dp[2] ~ dp[N] 까지 n/2 까지 확인
+ex> n=2일때,
+	dp[1] + dp[1] > dp[2] 체크
+	================================
+	n=3일때,
+	dp[1] + dp[2] > dp[3] 체크 
+	================================
+	n=4일때,
+	dp[1] + dp[3] > dp[4] 체크
+	dp[2] + dp[2] > dp[4] 체크
+	================================
+	.
+	.
+	.
+
+위와 같은 top-bottom 방식으로 풀이
+*/
+
+#include<iostream>
+
+using namespace std;
+
+int main() {
+
+	int N;
+	int* arr;
+	int* dp;
+
+	cin >> N;
+
+	arr = new int[N + 1]{ 0, };
+	dp = new int[N + 1]{ 0, };
+
+	for (int i = 1; i <= N; i++) {
+		cin >> arr[i];
+		dp[i] = arr[i];
+	}
+
+	for (int i = 2; i <= N; i++) {
+		for (int j = 1; j <= i / 2; j++) {
+			if (dp[j] + dp[i - j] > dp[i]) {
+				dp[i] = dp[j] + dp[i - j];
+			}
+		}
+	}
+	
+
+	cout << dp[N];
+
+	delete[] arr;
+	delete[] dp;
+	return 0;
+}

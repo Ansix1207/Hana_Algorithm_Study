@@ -1,0 +1,38 @@
+// 프로그래머스_LV2_힙_더 맵게
+/*
+풀이>
+    우선순위 큐(최소 힙)을 사용해 풀이했다.
+    top에 오는 수가 가장 작은 수 이므로 이 성질을 이용해 pop을 두번 진행하여 a + b*2 를 다시 push하는 작업을
+    while 조건문에 걸릴때까지 반복하도록 하여 답을 구했다.
+
+*/
+
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int solution(vector<int> scoville, int K) {
+    int answer = 0;
+    long long a,b;
+    priority_queue<int, vector<int>, greater<int>> pq;
+    
+    for (int i=0; i<scoville.size(); i++) {
+        pq.push(scoville[i]);
+    }
+    
+    while (pq.size() > 1 && pq.top() < K) {
+        a = pq.top();
+        pq.pop();
+        b = pq.top()*2;
+        pq.pop();
+        
+        pq.push(a+b);
+        answer++;
+    }
+    if (pq.top() < K)
+        return -1;
+    else
+        return answer;
+}

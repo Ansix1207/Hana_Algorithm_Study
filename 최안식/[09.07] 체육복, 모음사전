@@ -1,0 +1,33 @@
+import java.util.*;
+class Solution {
+    public int solution(int n, int[] lost, int[] reserve) {
+        int answer = n-lost.length;
+        int ti = 0; 
+        int tj = 0;
+        Arrays.sort(lost);
+        Arrays.sort(reserve);
+        boolean[] visit = new boolean[reserve.length+1];
+        for(int i = 0 ; i < lost.length ; i ++){
+            for(int j = 0; j < reserve.length ; j++){
+                if(lost[i] == reserve[j]){
+                    answer++;
+                    lost[i] = -1;
+                    reserve[j] = -1;
+                    break;
+                }
+            }
+        }
+        
+        for(int i = 0 ; i < lost.length ; i++){
+            for(int j = tj ; j < reserve.length; j++){
+                //현재 잃어버린사람과, 여벌가진 사람이 양옆으로 있는게 맞으면 빌림
+                if( Math.abs(lost[i]-reserve[j])==1){
+                    answer+=1;
+                    tj=j+1;
+                    break;
+                }
+            }
+        }
+        return answer;
+    }
+}

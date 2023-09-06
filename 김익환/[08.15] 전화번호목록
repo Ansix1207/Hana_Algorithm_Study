@@ -1,0 +1,41 @@
+// 프로그래머스_LV2_해쉬_전화번호목록
+
+/*
+풀이>
+  처음에 풀이는 문자열의 find함수를 사용해서 풀이했는데 79점 통과가 나왔다. 
+  이 풀이 방법은 문제가 있다고 판단했고
+  unsordered_map 을 사용하여 풀이하는 것을 참고해 이 문제를 풀어냈다.
+  map과 set을 사용해 풀이하는 방법에 대해 익숙해져야 할 필요를 느꼈다.
+
+
+*/
+#include <string>
+#include <vector>
+#include <unordered_map>
+//#include <iostream>
+
+using namespace std;
+
+bool solution(vector<string> phone_book) {
+    bool answer = true;
+    unordered_map<string, int> hash_map;
+    int size = phone_book.size();
+    
+    for(int i=0; i<size; i++) {
+        hash_map.insert(make_pair(phone_book[i],1));
+    }
+    
+    for (int i = 0; i<size; i++) {
+        string str = "";
+        for (int j=0; j<phone_book[i].size()-1; j++) {
+            str += phone_book[i][j];
+            //cout << "str = " << str << '\n';
+            if(hash_map[str]) {
+                //cout << "str = " << str << '\n';
+                return false;
+            }
+        }
+        
+    }
+    return answer;
+}

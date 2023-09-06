@@ -1,0 +1,111 @@
+// 백준_골드3_16964번_DFS스페셜저지
+
+/*
+풀이>
+1. 간선을 배열 벡터에 입력 (보다 간편한 코드 구현을 위해 배열 벡터륿 사용했다.)
+2. 주어진 DFS 방문순서를 기준으로 각 지점의 간선 연결 지점을 오름차순 정렬
+	=> 주어진 방문순서가 참이라면 DFS하여 방문한 지점의 결과가 같게 된다.
+3. 깊이 우선 탐색 실행
+
+*/
+
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int N;
+int arr[100001];
+int arr2[100001];
+int visit[100001];
+vector<int> map[100001];
+vector<int> sol;
+int flag;
+
+void dfs(int idx) {
+	// 방문 체크
+	visit[idx] = 1;
+
+	sol.push_back(idx);
+	for (int i = 0; i < map[idx].size(); i++) {
+		if (visit[map[idx][i]] == 0) {
+			dfs(map[idx][i]);
+		}
+	}
+}
+
+
+bool comp(int& a, int& b) {
+	return arr[a] < arr[b];
+}
+
+int main() {
+	int a, b;
+	
+
+	cin >> N;
+	
+	// dfs 방문순서 입력할 벡터
+	vector<int> tmp(N + 1);
+
+	// 0번째를 0으로 셋팅
+	tmp.push_back(0);
+	sol.push_back(0);
+
+	// 간선 입력
+	for (int i = 0; i < N - 1; i++) {
+		cin >> a >> b;
+
+		map[a].push_back(b);
+		map[b].push_back(a);
+	}
+	
+	// 연결된 간선을 방문순서를 기준으로 오름차순처리하기 위한 배열 셋팅
+	for (int i = 1; i <= N; i++) {
+		cin >> tmp[i];
+		arr[tmp[i]] = i;
+	}
+
+	// 해당 방문지점과 연결된 간선을 주어진 방문순서를 기준으로 오름차순 정렬
+	for(int i=1; i<=N; i++) {
+		sort(map[i].begin(), map[i].end(), comp);
+	}
+
+	// 깊이 우선 탐색 실행
+	dfs(1);
+
+	/*
+	cout << "모은 정답: ";
+	for (int i = 0; i <= N; i++) {
+		cout << sol[i] << " ";
+	}
+	cout << '\n';
+
+	cout << "제공 정답: ";
+	for (int i = 0; i <= N; i++) {
+		cout << tmp[i] << " ";
+	}
+	cout << '\n';
+	*/
+
+	// 입력한 방순순서가 옳은지 체크
+	for (int i = 1; i <= N; i++) {
+		if (tmp[i] != sol[i]) {
+			flag = 1;
+			break;
+		}
+	}
+
+	// 출력
+	if (flag == 1) {
+		cout << 0;
+	}
+	else {
+		cout << 1;
+	}
+
+
+	return 0;
+}

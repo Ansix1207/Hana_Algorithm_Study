@@ -1,0 +1,83 @@
+// 백준_골드5_13549번_숨바꼭질3
+/*
+풀이> 기본적으로 bfs로 풀이했다.
+1.bfs 의 로직에서 위치를 2배 이동시키는 부분은 0초가 들기 때문에
+가장 먼저 처리해 push해주어야 문제가 생기지 않는다.
+
+2.queue에서 하나씩 뺄때가 실제 그 지점을 방문했다고 볼 수 있기 때문에
+visit 체크를 queue에 push로 넣을때 처리하지말고 하나씩 뽑아올때 처리해야 빠진 부분이 없이 탐색할 수 있다.
+
+*/
+
+
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+int N, K;
+int visit[100001] = { 0, };
+int sol = 1000000;
+
+
+void bfs(int idx, int c) {
+	queue < pair<int, int>> que;
+	pair<int, int> p;
+
+	p.first = idx;
+	p.second = c;
+	que.push(p);
+
+	while (!que.empty()) {
+		int n = que.front().first;
+		int count = que.front().second;
+		visit[K] = 0;
+
+		visit[n] = 1;
+
+		//cout << "idx = " << n << " count = " << count << '\n';
+		if (n == K) {
+			if (sol > count) {
+				sol = count;
+			}
+			
+		}
+
+		que.pop();
+
+		if (n > 0 && n * 2 <= 100000 && visit[n * 2] == 0) {
+			p.first = n * 2;
+			p.second = count;
+			que.push(p);
+			//visit[n * 2] = 1;
+		}
+
+		if (n + 1 <= 100000 && visit[n + 1] == 0) {
+			p.first = n + 1;
+			p.second = count + 1;
+			que.push(p);
+			//visit[n + 1] = 1;
+		}
+
+		if (n - 1 >= 0 && visit[n - 1] == 0) {
+			p.first = n - 1;
+			p.second = count + 1;
+			que.push(p);
+			//visit[n - 1] = 1;
+		}
+
+		
+	}
+
+}
+
+int main() {
+
+	cin >> N >> K;
+
+	bfs(N,0);
+
+	cout << sol;
+
+	return 0;
+}

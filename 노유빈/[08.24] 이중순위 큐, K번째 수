@@ -1,0 +1,83 @@
+# deque 를 이용해서 해결. 음수인 경우는 문자열 자르기로 해결
+
+from collections import deque
+
+def solution(operations):
+    answer = []
+    
+    k = deque()
+    
+    for i in range(0,len(operations)):
+        k1 = operations[i].split(" ")
+        
+        # 숫자 삽입
+        
+        if k1[0] == "I":
+            
+            # 삽입할 숫자가 양수
+            
+            if "-" not in k1[1]:
+                k.append(int(k1[1]))
+                
+            
+            # 음수
+            else: 
+                k.append(-int(k1[1][1:]))
+                
+                
+            k = deque(list(sorted(list(k))))
+            
+        else:
+            
+            # 최댓값 삭제
+            
+            if k1[1] == "1" and len(k)!=0:
+                k.pop()
+                
+                
+            
+            # 최솟값 삭제
+            
+            else:
+                if len(k)!=0:
+                    k.popleft()
+            
+            
+    if len(k)==0:
+        return [0,0]
+    else:
+        return [max(k),min(k)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# K번째 수
+
+# 하라는대로 구현함
+
+def solution(array, commands):
+    answer = []
+    
+    for i in range(0,len(commands)):
+        start = commands[i][0]
+        finish = commands[i][1]
+        
+        k = array[start-1:finish]
+        
+        k = list(sorted(k))
+        
+        answer.append(k[commands[i][2]-1])
+    
+    return answer

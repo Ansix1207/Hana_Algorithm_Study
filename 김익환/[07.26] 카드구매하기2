@@ -1,0 +1,49 @@
+// 백준_실버1_16194번_카드구매하기2
+
+/*
+풀이>
+
+전체적으로 bottom-top 방식으로 풀이했다.
+
+	1. dp[i] = arr[i]; 로 기본세팅 (비교하여 갱신하기 위해 사용, 갱신이 안될 시 해당값이 가장 작은 값이 된다)
+	2. dp[i] > dp[j] + dp[i - j] 일때 
+	   dp[i] = dp[j] + dp[i - j];
+*/
+
+
+#include<iostream>
+
+using namespace std;
+
+
+int main() {
+
+	int N;
+	int* arr;
+	int* dp;
+
+	cin >> N;
+	arr = new int[N + 1]{ 0, };
+	dp = new int[N + 1]{ 0, };
+
+	for (int i = 1; i <= N; i++) {
+		cin >> arr[i];
+		dp[i] = arr[i];
+	}
+	
+
+	for (int i = 2; i <= N; i++) {
+		for (int j = 1; j <= i / 2; j++) {
+			if (dp[i] > dp[j] + dp[i - j]) {
+				dp[i] = dp[j] + dp[i - j];
+			}
+		}
+		//cout << "dp[" << i << "] = " << dp[i] << '\n';
+	}
+
+	cout << dp[N];
+
+	delete[] arr;
+	delete[] dp;
+	return 0;
+}

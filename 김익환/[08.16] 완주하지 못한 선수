@@ -1,0 +1,44 @@
+// 프로그래머스_LV2_해시_완주하지 못한 선수
+
+/*
+풀이> 
+    1. unordered_map 즉 해쉬맵을 사용해 완주한 선수의 목록과 수를 각각 키와 값을 통해 설정
+    2. 참여한 선수의 목록을 순회하며 완주한 선수의 목록과 비교해 없는 선수면 반환한다.
+
+*/
+
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+string solution(vector<string> participant, vector<string> completion) {
+    string answer = "";
+    unordered_map<string, int> hash_map;
+    
+    for(int i = 0; i<completion.size(); i++) {
+        if (hash_map.find(completion[i]) == hash_map.end()) {
+            hash_map.insert(make_pair(completion[i], 1));
+        }
+        else{
+            hash_map[completion[i]]++;
+        }
+    }
+    
+    for(int i = 0; i<participant.size(); i++) {
+        if (hash_map.find(participant[i]) == hash_map.end()) {
+            return participant[i];
+        }
+        else {
+            if (hash_map[participant[i]] == 0) {
+                return participant[i];
+            }
+            else {
+                hash_map[participant[i]]--;
+            }
+        }
+    }
+    
+    return answer;
+}

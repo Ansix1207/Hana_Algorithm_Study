@@ -1,0 +1,88 @@
+# 가장 긴 감소하는 부분 수열 
+
+# 가장 긴 증가하는 부분 수열을 반대로만 작성하면 풀리는 문제이다. 풀이는 암기가 되었는데
+# 확실하게 과정을 이해를 해야겠다.
+
+
+from collections import deque
+
+'''
+
+n = int(input())
+
+k = list(map(int,input().split(" ")))
+
+dp = [1]*(n+1)
+
+
+
+for i in range(1,len(dp)-1):
+    for j in range(0,i):
+
+        if k[i]<k[j]:
+
+            dp[i] = max(dp[j]+1,dp[i])
+
+
+print(max(dp))
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 정수 삼각형
+
+# 누적으로 풀었다. 풀어본 유형이여서 쉽게 풀 수 있었다.
+
+n = int(input())
+
+k = [ ]
+
+for i in range(n):
+    k.append(list(map(int,input().split(" "))))
+
+
+
+if n==1:
+    print(k[0][0])
+
+elif n==2:
+    print(max(k[1][1]+k[0][0],k[1][0]+k[0][0]))
+
+else:
+
+    k[1][1] += k[0][0]
+    k[1][0] += k[0][0]
+    
+
+    for i in range(2,n):
+
+        for j in range(0,len(k[i])):
+
+            if j==0:
+                k[i][0] += k[i-1][0]
+
+
+
+            elif j==len(k[i])-1:
+                k[i][j] += k[i-1][j-1]
+
+            else:
+                k[i][j] += max(k[i-1][j],k[i-1][j-1])
+
+
+    print(max(k[-1]))
+                
+
+        

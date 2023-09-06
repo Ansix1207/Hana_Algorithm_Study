@@ -1,0 +1,166 @@
+# RGB거리 2
+
+# 각 경우를 세가지로 나누어서 해결함. 중간에 첫집 말고 나머지를 최댓값으로 초기화 해주는 것을 생각하지 못해서 기존 풀이 참고함
+
+
+import copy
+
+n = int(input())
+
+k = [ ]
+ 
+for i in range(n):
+    k.append(list(map(int,input().split(" "))))
+
+
+answer = [ ] 
+
+# 첫 집이 빨
+
+a = copy.deepcopy(k)
+
+
+a[0][1] = 1000000000
+a[0][2] = 1000000000
+
+for i in range(1,len(a)):
+    a[i][0] += min(a[i-1][1],a[i-1][2])
+    a[i][1] += min(a[i-1][0],a[i-1][2])
+    a[i][2] += min(a[i-1][0],a[i-1][1])
+
+answer.append(min(a[-1][1],a[-1][2]))
+
+# 첫 집이 초
+
+b = copy.deepcopy(k)
+
+b[0][0] = 1000000000
+b[0][2] = 1000000000
+
+for i in range(1,len(b)):
+    b[i][0] += min(b[i-1][1],b[i-1][2])
+    b[i][1] += min(b[i-1][0],b[i-1][2])
+    b[i][2] += min(b[i-1][0],b[i-1][1])
+
+answer.append(min(b[-1][0],b[-1][2]))
+
+# 첫 집이 파
+
+c = copy.deepcopy(k)
+
+c[0][0] = 1000000000
+c[0][1] = 1000000000
+
+
+for i in range(1,len(c)):
+    c[i][0] += min(c[i-1][1],c[i-1][2])
+    c[i][1] += min(c[i-1][0],c[i-1][2])
+    c[i][2] += min(c[i-1][0],c[i-1][1])
+
+answer.append(min(c[-1][1],c[-1][0]))
+
+
+
+print(min(answer))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 전화 번호 목록
+
+# 예전에 풀었던 기억이 있어 startswith 을 사용했다.
+
+def solution(k):
+    answer = True
+    
+    k = list(sorted(k))
+    
+    for i in range(0,len(k)-1):
+        if k[i+1].startswith(k[i]) or k[i].startswith(k[i+1]):
+            return False
+    
+    return True
+
+
+
+
+
+
+
+
+
+
+
+# 포켓몬
+
+def solution(nums):
+    answer = 0
+    
+    pick = int(len(nums)/2)
+
+    k = list(set(nums))
+    
+    if len(k)>pick:
+        return pick
+    
+    else:
+        return len(k)
+
+
+
+
+
+
+
+
+
+
+
+# 의상
+
+# 계속 오답이여서 Counter 활용함
+
+from collections import Counter
+ 
+def solution(clothes):
+    answer = 1
+ 
+    temp = [ ]
+ 
+    for i in range(0,len(clothes)):
+        temp.append(clothes[i][1])
+ 
+    a = Counter(temp)
+
+    
+
+    k = [ ]
+ 
+    for i,j in a.items():
+        k.append(j+1)
+ 
+    for i in k:
+        answer *= i
+ 
+    return answer-1
+
+
+
+
+
+
+
+
+
+

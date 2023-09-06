@@ -1,0 +1,75 @@
+import java.util.*;
+class Solution {
+        static HashSet<Integer> set = new HashSet<>();
+        static char[] arr; //종이 조각
+        static boolean[] visit; //사용 여부
+        static int answer = 0;
+        public int solution(String numbers) {
+            visit = new boolean[numbers.length()];
+            arr = numbers.toCharArray();
+            dfs(numbers, "", 0);
+            for (Integer integer : set) {
+                cal(integer);
+            }
+            System.out.println(set.toString());
+            return answer;
+        }
+
+        public void dfs(String origin, String temp,  int idx) {
+            if(idx == arr.length){
+                return;
+            }
+            for (int i = 0; i < origin.length(); i++) {
+                if (!visit[i]) {
+                    visit[i] = true;
+                    if(!(Integer.parseInt(temp+String.valueOf(origin.charAt(i))) <2)){
+                        set.add(Integer.parseInt(temp+String.valueOf(origin.charAt(i))));
+                    }
+                    dfs(origin, temp+origin.charAt(i),idx+1);
+                    visit[i] = false;
+                }
+            }
+        }
+        //  소수판별 메소드
+        public static void cal(int n){
+            // 0과 1은 소수가 아니므로 바로 종료.
+            if(n == 0) return;
+            if(n == 1) return;
+            //16 (1 2 4 8 16
+            //2~n의 제곱근까지 돌면서 나누어 떨어지면 소수가 아니므로 메소드 종료.
+            for(int i=2;i<=Math.sqrt(n);i++){
+                if(n % i == 0) return;
+            }
+            //모두 나누어 떨어지지 않으면 소수이므로 answer 증가.
+            answer++;
+        }
+    }
+
+
+
+=================
+
+import java.util.*;
+class Solution {
+    public int[] solution(int brown, int yellow) {
+        int[] answer = new int[2];
+        int sum = brown + yellow;
+        
+        for(int i = 3; i  < sum ; i ++){
+            int j = sum/i;
+            if(sum%i==0 && j>=3){
+                //긴쪽이 가로
+                int hol = Math.max(i,j);
+                int ver = Math.min(i,j);
+                int center = (hol-2) * (ver-2);
+                
+                if(center == yellow){
+                    answer[0] = hol;
+                    answer[1] = ver;
+                    return answer;
+                }
+            }
+        }
+        return answer;
+    }
+}

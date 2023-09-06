@@ -1,0 +1,115 @@
+// 백준_골드3_2146번_bfs_다리만들기
+/*
+	풀이>
+		1. dfs를 사용해 같은 땅에 속한 지점들을 2부터 같은 숫자로 표현
+		2. 위를 처리하면서 각 땅을 큐에 쌓아 벡터에 저장해 놓는다.
+		3. 벡터에 저장된 큐를 하나씩 bfs를 돌리며 현재 땅과 다른 땅에 도달할때까지 밟은 땅을 count한다.
+		4. 새로운 땅에 도착했을때으 ocunt의 값이sol 에 저장된 값보다 작으면 sol = count로 갱신
+		5. 두 땅의 다리를 잇기위한 땅의 수를 세는것이기에 새로운 땅에 도착할때를 센 1을 sol에서 빼준다
+
+*/
+
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+int map[102][102] = { 0, };
+int visit[102][102] = { 0, };
+vector<queue<pair<pair<int, int>, int>>> v;
+int arr1[4] = { 0,1,0,-1 };
+int arr2[4] = { 1,0,-1,0 };
+
+void bfs(int idx1, int idx2, int num) {
+
+	queue<pair<int, int>> que;
+	queue<pair<pair<int, int>, int>> que2;
+
+	que.push(make_pair(idx1, idx2));
+	que2.push(make_pair(make_pair(idx1, idx2), 0));
+	visit[idx1][idx2] = 1;
+	map[idx1][idx2] = num;
+
+	while (!que.empty()) {
+
+		int a = que.front().first;
+		int b = que.front().second; 
+		que.pop();
+
+		for (int i = 0; i < 4; i++) {
+			if (map[a + arr1[i]][b + arr2[i]] == 1 && visit[a + arr1[i]][b + arr2[i]] == 0) {
+				que.push(make_pair(a + arr1[i], b + arr2[i]));
+				que2.push(make_pair(make_pair(a + arr1[i], b + arr2[i]), 0));
+				visit[a + arr1[i]][b + arr2[i]] = 1;
+				map[a + arr1[i]][b + arr2[i]] = num;
+			}
+		}
+	}
+	v.push_back(que2);
+}
+
+void init_visit(int n) {
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			visit[i][j] = 0;
+		}
+	}
+}
+
+int main() {
+
+	int N;
+	int num = 2;
+	int sol = 10000;
+
+
+
+	cin >> N;
+
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			if (map[i][j] == 1 && visit[i][j] == 0) {
+				bfs(i, j, num);
+				++num;
+			}
+		}
+	}
+
+	num = 2;
+	for (int i = 0; i < v.size(); i++) {
+		queue<pair<pair<int, int>, int>> que = v[i];
+
+		init_visit(N);
+
+		while (!que.empty()) {
+			int a = que.front().first.first;
+			int b = que.front().first.second;
+			int count = que.front().second;
+			que.pop();
+
+			if (map[a][b] != num && map[a][b] != 0) {
+				if (sol > count) {
+					sol = count;
+				}
+			}
+
+			for (int j = 0; j < 4; j++) {
+				if (a + arr1[j] > 0 && a + arr1[j] <= N && b + arr2[j] > 0 && b + arr2[j] <= N && map[a + arr1[j]][b + arr2[j]] != num && visit[a + arr1[j]][b + arr2[j]] == 0) {
+					que.push(make_pair(make_pair(a + arr1[j], b + arr2[j]), count + 1));
+					visit[a + arr1[j]][b + arr2[j]] = 1;
+				}
+			}
+		}
+		++num;
+	}
+	// 다리의 수만 세어야 하므로 새로운땅에 도착했을 경우인 1을 빼준다.
+	cout << sol-1;
+
+	return 0;
+}

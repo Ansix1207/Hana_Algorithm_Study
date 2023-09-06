@@ -1,0 +1,72 @@
+# 가증 큰 수
+
+# 스스로 + 옛날에 풀었던 기억으로 해결함. "000" 인 경우 "0"으로 나와야 하기에 이를 예외처리함
+
+
+def solution(numbers):    
+    
+    k =  list(map(str,numbers))    
+    
+    answer = str("".join(list(sorted(list(map(str,numbers)),key = lambda x : x*3,reverse=True))))
+    
+    if answer.startswith("0"):
+        return "0"
+    return str(answer)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# H-index
+
+# 테스트 케이스 11번만 계속 통과를 안한다. 다시 고민을 해봐야될듯. 아직은 못찾겠음
+
+def solution(citations):  
+
+            
+            
+    answer = [ ]
+    
+    k = list(sorted(citations,reverse=True))
+    
+    if max(citations) == 0: # [0,0,0]인 경우 0 리턴
+        return 0
+    
+    for i in range(1,max(k)+1):
+        
+        # i 는 H-index 값
+        
+        count = 0
+        minus = 0
+        
+        
+        
+        for j in range(0,len(k)):
+            
+            if k[j]>=i:
+                count += 1
+            else:
+                break
+                
+        if count>=i:
+            answer.append(count)
+    
+    
+    return min(answer)

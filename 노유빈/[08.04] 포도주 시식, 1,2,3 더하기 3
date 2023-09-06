@@ -1,0 +1,91 @@
+
+# 포도주 시식
+
+# 마지막 점화식에서 힌트를 참고했다. 
+
+import sys
+from collections import deque
+
+input = sys.stdin.readline
+
+'''
+
+n = int(input())
+
+k = [ ]
+
+k.append(0)
+
+for i in range(n):
+    k.append(int(input()))
+
+
+if n==1:
+    print(k[1])
+
+elif n==2:
+    print(k[1]+k[2])
+
+else:
+
+    dp = [0]*(n+1)
+
+    dp[1] = k[1]
+    dp[2] = k[1]+k[2]  
+
+    
+        
+    for i in range(3,len(dp)):
+
+        # 현재 것을 안고르는 경우, 전전 것 고르기, 전전전 / 전 / 현재 고르기
+        
+        dp[i] = max(dp[i-1],dp[i-2]+k[i],dp[i-3]+k[i-1]+k[i])
+            
+    print(max(dp))
+
+'''
+
+
+
+
+
+
+
+# 1,2,3 더하기 3
+
+# 수학적인 규칙을 찾는 문제이다. 이것도 한번에 캐치는 못했다.
+
+
+n = int(input())
+
+dp = [0]*(1000000+1)
+
+dp[0] = 1
+dp[1] = 1
+dp[2] = 2
+
+for i in range(3,len(dp)):
+    dp[i] = dp[i-2]%1000000009 +dp[i-1]%1000000009 +dp[i-3]%1000000009 
+
+for i in range(n):
+    a = int(input())
+    print(dp[a]%1000000009)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

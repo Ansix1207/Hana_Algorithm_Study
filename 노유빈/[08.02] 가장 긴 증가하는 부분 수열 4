@@ -1,0 +1,57 @@
+
+# dp까지는 했는데 출력을 어떻게 할 지 몰라서 구글링했다. dp값의 최대부터 1씩 줄이면서 찾는 방식이다.
+# 예시를 그려보며 해봤는데 반례가 없는 걸로 봐서 정확한 풀이인 것 같다.
+
+
+n = int(input())
+
+
+k = list(map(int,input().split(" ")))
+
+# answer에 정답 계속 갱신 해주기
+
+answer = [ ]
+
+dp = [1] * (n+1)
+
+for i in range(1,len(dp)-1):
+
+    temp = [ ]
+    
+    for j in range(0,i+1):
+
+        if k[i]>k[j]:
+
+            dp[i] = max(dp[j]+1,dp[i])
+
+
+# 이부분이 틀린 부분
+
+'''
+            if dp[i] == dp[j]+1:
+                temp.append(k[j])
+
+    if len(temp)!=0:
+        if k[i] > max(temp):
+             temp.append(k[i])
+    
+    if len(answer)<len(temp):
+        answer = temp
+
+print(max(dp))
+
+'''
+
+subsequence = [] #정답수열 입력할 배열선언
+order = max(dp)  # max(dp) 값을 저장
+for i in range(n - 1, -1, -1):
+    if dp[i] == order:  # 만약 dp[i] 값이 order값과 같다면
+        subsequence.append(k[i])  # 해당 input_array[i]값을 추가
+        order -= 1  # 해당 order 값을 1씩 감소시킨다.
+
+subsequence = list(sorted(subsequence))
+
+for i in subsequence:
+    print(i,end=" ")
+        
+

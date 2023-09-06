@@ -1,0 +1,133 @@
+// 백준_1967번_골드4_DFS_트리의지름
+
+/*
+기본 풀이는 DFS를 사용하여 풀이했다.
+주어지는 데이터가 "부모노드, 자식노드, 가중치" 로 되어있어서 visit을 체크할 필요가 없었다.
+
+풀이
+	1. 시작 노드가 2개 이상의 자식 노드를 가지고 있을때, 
+	   각 자식노드들로 인해 생기는 최댓값들 중 가장 큰 2개의 값으로 sol 과 비교하여 더 높은값으로  sol을  갱신한다.
+
+	2. 시작 노드가 1개의 자식 노드만 가지고 있을때,
+	   1개의 자식노드로 인해 생기는 값들 중 최댓값을 sol과 비교하여 더 높은 값을 sol로 갱신한다.
+
+
+	dfs에서 자식노드가 더이상 없는 경우 노드의 끝에 도달했다고 판단한다.
+*/
+
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int n;
+vector<pair<int, int>> map[10001];
+int node, node2, value;
+pair<int, int> p;
+int check = 0;
+int sol = 0;
+int start;
+vector<int> tmp;
+
+void init_visit(int n) {
+
+	for (int i = 0; i <= n; i++) {
+	}
+}
+
+void dfs(int idx, int count) {
+
+	int a, num;
+
+	if (map[idx].size() == 0) {
+		if (check == tmp.size()) {
+			if (tmp[check-1] < count) {
+				//cout << check << " 번째 인덱스 갱신 거리: " << count << '\n';
+				tmp[check - 1] = count;
+			}
+		}
+		else {
+			//cout << "새로 추가된 거리: " << count << '\n';
+			tmp.push_back(count);
+		}
+
+		return;
+	}
+
+	
+	if (idx == start) {
+		for (int i = 0; i < map[idx].size(); i++) {
+			a = map[idx][i].first;
+			num = map[idx][i].second;
+			
+			++check;
+			dfs(a, num);
+			
+		}
+	}
+	else {
+		for (int i = 0; i < map[idx].size(); i++) {
+
+			a = map[idx][i].first;
+			num = map[idx][i].second;
+
+			dfs(a, count + num);
+		}
+	}
+}
+
+bool comp(int a, int b) {
+	return a > b;
+}
+
+int main() {
+
+	
+
+	cin >> n;
+
+	for (int i = 1; i < n; i++) {
+		cin >> node >> node2 >> value;
+		p.first = node2;
+		p.second = value;
+		map[node].push_back(p);
+	}
+
+	for (int i = 1; i <= n; i++) {
+		if (map[i].size() > 1) {
+			start = i;
+			dfs(i, 0);
+
+			sort(tmp.begin(), tmp.end(), comp);
+
+			if (tmp[0] + tmp[1] > sol) {
+				sol = tmp[0] + tmp[1];
+			}
+			tmp.clear();
+			init_visit(n);
+			check = 0;
+		}
+
+		if (map[i].size() == 1) {
+			start = i;
+			dfs(i, 0);
+
+			sort(tmp.begin(), tmp.end(), comp);
+
+			if (tmp[0] > sol) {
+				sol = tmp[0];
+			}
+			tmp.clear();
+			init_visit(n);
+			check = 0;
+		}
+	}
+
+	cout << sol;
+
+
+
+	return 0;
+}

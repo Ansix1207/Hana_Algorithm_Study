@@ -1,0 +1,56 @@
+// 프로그래머스_LV2_완전탐색_소수 찾기
+
+/*
+    풀이>
+        1. dfs로 원소를 하나씩 선택해 수를 만들 수 있게 만들었다.
+        2. 만들어진 수를 2~ 수/2 까지 체크하여 나눠지는 수가 없다면 소수로 판별한다.
+        3. map을 사용하여 중복되지 않게 소수의 총 수를 구한다.
+
+*/
+
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+int answer = 0;
+int visit[10000000];
+map<int,int> m;
+
+
+void dfs(string numbers, string num) {
+    
+    int count = 0;
+    
+    for(int i=0; i<numbers.size(); i++) {
+        if (visit[i] == 0) {
+            int n = stoi(num+numbers[i]);
+            cout << num+numbers[i] << '\n';
+            for(int i=2; i<=n/2; i++) {
+                if (n%i == 0) {
+                    count++;
+                    break;
+                }
+            }
+            if (count == 0 && n > 1){
+                m.insert({n, 1});
+                cout << "소수 : " << n << '\n';
+            }
+            visit[i] = 1;
+            dfs(numbers,num+numbers[i]);
+            visit[i] = 0;
+        }
+        count = 0;
+    }
+}
+
+int solution(string numbers) {
+    
+    dfs(numbers, "");
+    
+    answer = m.size();
+    
+    return answer;
+}

@@ -1,0 +1,188 @@
+
+[07.04]
+
+# 미로 탐색
+
+# 생각보다 쉽게 풀었다. 함수에서 굳이 return 을 하지 않아도 되는 경우를 구별하는 게 중요한 것 같다.2차원 리스트 초기화 부분을 명확히 해야겠다.
+
+
+import sys
+from collections import deque
+
+def bfs(a,b,N,M):
+
+    dx = [0,0,1,-1]
+    dy = [1,-1,0,0]
+
+    queue = deque()
+
+    queue.append([a,b])
+
+    while queue:
+
+        x,y = queue.popleft()
+
+        for i in range(4):
+            temp_x = x + dx[i]
+            temp_y = y + dy[i]
+
+            if visited[temp_x][temp_y] == False:
+                if 0<=temp_x<N and 0<=temp_y<M and k[temp_x][temp_y]!=0:
+
+                    k[temp_x][temp_y] = k[x][y] + 1
+                    visited[temp_x][temp_y] = True
+
+                    queue.append([temp_x,temp_y])
+
+    
+
+        
+    
+
+    
+
+
+
+
+
+
+
+N,M = list(map(int,sys.stdin.readline().split(" ")))
+
+k = [ ]
+
+for i in range(N):
+    k.append(list(map(int,list(sys.stdin.readline().rstrip()))))
+
+visited = [[False]*(M+1) for i in range(N+1)]
+
+for i in range(0,len(k)):
+    for j in range(0,len(k[i])):
+
+        if visited[i][j] == False and k[i][j] !=0:
+            bfs(i,j,N,M)
+
+
+print(k[-1][-1])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 토마토
+
+# 핵심 아이디어가 두 가지 있다.
+# 초기의 토마토들은 동시에 익기 시작한다는 것과 날짜를 구하기 위해 temp 리스트를 사용한 것이다.
+
+import sys
+from collections import deque
+
+
+global count
+count = 0
+
+
+def bfs(temp,N,M):
+
+    global count
+
+    dx = [0,0,1,-1]
+    dy = [1,-1,0,0]
+    
+    queue = deque()
+
+    for i in range(0,len(temp)):
+        queue.append([temp[i][0],temp[i][1]])
+
+    # 일 수를 구하기 위해 temp 리스트를 사용하기
+
+    temp = [ ]
+
+    while queue:
+        
+
+        x,y = queue.popleft()
+
+        for i in range(4):
+            temp_x = x + dx[i]
+            temp_y = y + dy[i]
+
+            
+            if 0<=temp_x<M and 0<=temp_y<N and k[temp_x][temp_y]==0:
+
+                k[temp_x][temp_y] = 1
+                
+                # visited[temp_x][temp_y] = True
+
+                temp.append([temp_x,temp_y])
+                
+        if len(queue)==0:
+            count += 1
+            queue = deque(temp)
+            temp = [ ]
+
+
+
+N,M = list(map(int,sys.stdin.readline().split(" ")))
+
+
+k = [ ]
+
+for i in range(M):
+    k.append(list(map(int,sys.stdin.readline().split(" "))))
+
+
+# 모든 토마토가 익은 상태 : 0 이 없으면 
+
+zero = 0
+
+for i in range(0,len(k)):
+    for j in range(0,len(k[i])):
+        if k[i][j] == 0:
+            zero += 1
+
+if zero == 0:
+    print(0)
+
+
+else:    
+
+    temp = [ ]
+
+    for i in range(0,len(k)):
+        for j in range(0,len(k[i])):
+            if k[i][j] == 1:
+                temp.append([i,j])
+                
+    bfs(temp,N,M)
+    
+# 토마토가 모두 익지 못하는 상황 : 돌렸는데 0 이 있으면
+
+    zeros = 0
+
+    for i in range(0,len(k)):
+        for j in range(0,len(k[i])):
+            if k[i][j] == 0:
+                zeros += 1
+
+    if zeros != 0:
+        print(-1)
+
+    # 그렇지 않다면
+    
+    else:
+        print(count-1)
+

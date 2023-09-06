@@ -1,0 +1,42 @@
+// 프로그래머스_LV2_해시_의상
+
+/*
+풀이>
+    unoredered_map을 사용해 hash map을 구현하여 풀이했습니다.
+    map.find 를 사용하여 map.end()일 경우 해당 키가 맵에 없는 경우이므로 insert로 추가하고
+    해당 키가 맵에 있을 경우는 해당 키의 값을 +1해주어 
+    최종적으로 a개/b개/c개 가 나왔다고 가정할때,
+    최종답 = (a+1)*(b+1)*(c+1) - 1;    // -1은 모두 0일때를 제외하기 위해
+
+*/
+
+#include <string>
+#include <vector>
+#include <unordered_map>
+//#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<string>> clothes) {
+    int answer = 0;
+    unordered_map<string, int> hash_map;
+    int size = hash_map.size();
+    int sol = 1;
+    
+    for(int i=0; i<clothes.size(); i++) {
+        if (hash_map.find(clothes[i][1]) == hash_map.end())
+            hash_map.insert(make_pair(clothes[i][1], 1));
+        else {
+            hash_map[clothes[i][1]] +=1;
+        }
+    }
+    
+    for (auto iter : hash_map) {
+        //cout << "수 :" << iter.second+1 << '\n';
+        sol = sol * (iter.second + 1);
+    }
+    
+    answer = sol -1;
+    
+    return answer;
+}

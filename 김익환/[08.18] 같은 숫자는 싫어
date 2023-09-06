@@ -1,0 +1,30 @@
+// 프로그래머스_LV1_스택/큐_같은 숫자는 싫어
+
+/*
+    풀이>
+        변수를 하나 둬서 다음에 오는 수와 비교할 수 있도록 하였다.
+        1. 변수 num 에 idx = 0 위치의 수 입력
+        2. for문을 돌며 arr의 변수를 num 수와 비교하며 다른 수가 나올 시 num을 갱신하면서 answer에 답 추가
+
+*/
+
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(vector<int> arr) 
+{
+    vector<int> answer;
+    int num = arr[0];
+    
+    answer.push_back(num);
+    
+    for (int i=1; i<arr.size(); i++) {
+        if(arr[i] != num) {
+            num = arr[i];
+            answer.push_back(num);
+        }
+    }
+
+    return answer;
+}

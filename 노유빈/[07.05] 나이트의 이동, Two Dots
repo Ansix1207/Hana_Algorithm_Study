@@ -1,0 +1,252 @@
+
+[07.05]
+
+# 나이트의 이동
+
+# temp 리스트를 추가해서 count를 계산하려고 했지만 시간 초과가 났다.
+# 구글링을 해보니 2차원 리스트를 통한 풀이가 있어 이를 참고했다. 풀 수 있던 문제였는데 아깝네요
+
+
+import sys
+from collections import deque
+
+def bfs(a,b,x,y,length):
+
+    # 시작 위치 a,b
+
+    # 도착 위치 x,y
+
+    count = 0
+    
+    queue = deque()
+
+    queue.append([a,b])
+
+    dx = [2,2,1,1,-1,-1,-2,-2]
+    dy = [1,-1,2,-2,2,-2,1,-1]
+
+    temp = [ ]
+
+    
+    while queue:       
+
+        n,m = queue.popleft()
+
+        if n==x and m==y:
+            return answer[n][m]-1
+       
+        
+        for i in range(8):
+            temp_x = n + dx[i]
+            temp_y = m + dy[i]
+
+            if 0<=temp_x<length and 0<=temp_y<length and answer[temp_x][temp_y]==0:
+
+                answer[temp_x][temp_y] = answer[n][m] + 1
+                queue.append([temp_x,temp_y])
+
+        
+
+        
+
+    
+
+
+num = int(sys.stdin.readline())
+
+for i in range(num):
+
+    length = int(sys.stdin.readline())
+
+    a,b = list(map(int,sys.stdin.readline().split(" ")))
+
+    x,y = list(map(int,sys.stdin.readline().split(" ")))
+
+    answer = [[0]*(length+1) for i in range(length+1)]
+
+    answer[a][b] = 1
+    
+    print(bfs(a,b,x,y,length))
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Two Dots
+
+
+import sys
+from collections import deque
+
+# 구글링 함 #
+'''
+핵심은 DFS를 사용하면서 재쉬 함수에 cnt 를 넣어주는 것 인 것 같다.
+따로 변수 크기를 증가시키지 않아도 된다.
+또한 바로 이전의 장소는 방문하지 않기 위해 매개변수를 통해
+이를 체크하는 과정도 새롭다.
+
+이렇게 보니까 풀만하네요
+'''
+
+input=sys.stdin.readline
+
+n,m = map(int,input().split())
+
+ary = [list(input()) for _ in range(n)]
+
+dx=[1,0,0,-1]
+dy=[0,1,-1,0]
+
+visited = [[0 for _ in range(m)] for __ in range(n)]
+
+# 결과 리스트
+
+result=[]
+
+def dfs(x,y,prex,prey,cnt):
+
+    # x,y 를 방문했고 cnt가 4 이상이면 
+    
+    if visited[x][y] and cnt >=4:
+        result.append("yes")
+        return
+    
+    visited[x][y]=1
+    
+    for idx in range(4):
+        nx = dx[idx]+x
+        ny = dy[idx]+y
+
+        
+        
+        if 0<=nx<n and 0<=ny<m and ary[nx][ny]==ary[x][y]:
+            if [nx,ny]!=[prex,prey]:
+                dfs(nx,ny,x,y,cnt+1)
+
+
+for i in range(n):
+    for j in range(m):
+
+        # 방문한 적이 없으면
+        
+        if not visited[i][j]:
+            
+            dfs(i,j,i,j,0)
+
+            
+if result:
+    print("Yes")
+else:
+    print("No")
+
+
+
+
+
+
+
+
+# 실패 코드
+
+'''
+
+문제 이해 초반에 잘못함. BFS 로 같은 거 4개만 있는거 찾으면 되는줄
+알았지만 그러면 골드 4가 아니겠죠.
+DFS 확실하게 몰라서 해설보고 품
+
+
+
+def bfs(a,b,n,m):
+
+    count = 0
+    
+    queue = deque()
+
+    queue.append([a,b])
+
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+
+    temp = [ ]
+    
+    while queue:        
+
+        x,y = queue.popleft()
+
+        if count>=3 and x==a+1 and y==b:
+            return True
+
+        if count>=3 and x==a-1 and y==b:
+            return True
+
+        if count>=3 and x==a and y==b+1:
+            return True
+
+        if count>=3 and x==a and y==b-1:
+            return True
+
+        visited[x][y] = True
+
+        for i in range(4):
+            temp_x = x + dx[i]
+            temp_y = y + dy[i]
+
+            if 0<=temp_x<n and 0<=temp_y<m and visited[temp_x][temp_y] == False and k[x][y] == k[temp_x][temp_y]:
+                
+                temp.append([temp_x,temp_y])
+                
+        if len(queue) == 0:
+            queue = deque(temp)
+            temp = [ ]
+            count+= 1
+            
+            
+n,m = list(map(int,sys.stdin.readline().split(" ")))
+
+k = [ ]
+
+for i in range(n):
+    k.append(list(input()))
+
+
+visited = [[False] * (m+1) for i in range(n+1)]
+
+check = False
+
+for i in range(0,len(k)):
+    for j in range(0,len(k[i])):
+
+
+        if visited[i][j] == False:
+            if bfs(i,j,n,m) == True:
+                print("YES")
+                check = True
+                break
+
+    if check == True:
+        break
+
+if check == False:
+    print("NO")
+
+
+'''
+
+
+    
+
+
+    
+

@@ -1,0 +1,34 @@
+// 프로그래머스_LV2_스택/큐_주식가격
+
+/*
+풀이>
+    1. 가격 하나를 다음 가격들과 비교하는데, 자신의 가격보다 작은 가격이 나올 때까지 count를 더해준다.
+    2. 작은 가격이 나왔을 때도 count를 +1 해준뒤 반복문을 나온다.
+    3. answer에 추가
+
+*/
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(vector<int> prices) {
+    vector<int> answer;
+    int count = 0;
+    
+    for(int i=0; i<prices.size();i++) {
+        count = 0;
+        for(int j = i+1; j<prices.size(); j++) {
+            if (prices[i] > prices[j]) {
+                count++;
+                break;
+            }
+            else {
+                count++;
+            }
+        }
+        answer.push_back(count);
+    }
+    return answer;
+}

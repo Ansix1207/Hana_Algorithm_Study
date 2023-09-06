@@ -1,0 +1,106 @@
+// 백준_골드4_16929번_TwoDots
+
+/*
+풀이>
+방문하지 않은 지점만을 이동하여 시작점으로 돌아올 수 있는지를 체크하기 위해
+깊이 우선 탐색을 사용해 풀이하였고
+dfs의 매개변수에 이동횟수를 넘겨주어 count >1 이상일때, 시작점의 방문 체크여부를 풀도록 하여
+처음 시작한 지점을 재방문 할 수 있도록 하였다.
+
+
+*/
+
+
+
+#include<iostream>
+#include<string>
+#include<vector>
+
+using namespace std;
+
+int N, M;
+vector<string> v;
+int visit[52][52] = { 0, };
+
+int idx1, idx2;
+int flag = 0;
+
+int arr1[4] = { 0,1,0,-1 };
+int arr2[4] = { 1,0,-1,0 };
+
+void init() {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			visit[i][j] = 0;
+		}
+	}
+}
+
+void dfs(int x, int y, char ch, int count) {
+	//cout << "좌표 찍기 : " << x << " " << y << " COUNT = " << count<< '\n';
+	if (flag == 1) {
+		return;
+	}
+	if (count > 0 && x == idx1 && y == idx2) {
+		//cout << "좌표는 : " << idx1 << " " << idx2 << '\n';
+		//cout << "count = " << count << '\n';
+		flag = 1;
+		return;
+	}
+	
+	for (int i = 0; i < 4; i++) {
+		if (count > 1) {
+			visit[idx1][idx2] = 0;
+		}
+		else {
+			visit[idx1][idx2] = 1;
+		}
+
+		if (0 <= x + arr1[i] && x + arr1[i] < N && 0 <= y + arr2[i] && y + arr2[i] < M) {
+			if (visit[x + arr1[i]][y + arr2[i]] == 0 && v[x + arr1[i]][y + arr2[i]] == ch) {
+				visit[x + arr1[i]][y + arr2[i]] = 1;
+				dfs(x + arr1[i], y + arr2[i], ch, count + 1);
+				visit[x + arr1[i]][y + arr2[i]] = 0;
+		}
+		}
+	}
+	
+
+}
+
+int main() {
+
+	string str;
+
+	cin >> N >> M;
+
+	for (int i = 0; i < N; i++) {
+		cin >> str;
+		v.push_back(str);
+	}
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			init();
+			if (visit[i][j] == 0) {
+				idx1 = i;
+				idx2 = j;
+				visit[idx1][idx2] = 1;
+				dfs(i,j,v[i][j],0);
+				if (flag == 1) {
+					cout << "Yes";
+					return 0;
+				}
+			}
+
+		}
+	}
+
+	if (flag == 0) {
+		cout << "No";
+	}
+
+	
+
+	return 0;
+}

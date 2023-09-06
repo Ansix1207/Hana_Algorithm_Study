@@ -1,0 +1,110 @@
+
+# 제곱수의 합
+
+
+
+# 가장 큰 제곱수를 차례대로 구하는 방식으로 해봤지만 반례가 있었고 해답을 보고 이해를 했다.
+# 이중 for 문을 이용해서 dp를 업데이트 해주는 방식이고 떠올리기는 쉽지 않았다. 
+
+
+n = int(input())
+
+# 최댓값으로 초기화 해줌
+
+dp = [i for i in range (n+1)]
+
+
+for i in range(1, n + 1):
+    
+    for j in range(1, i):
+
+        # 만약 제곱한 값이 더 크다면 더는 탐색할 필요 없음
+        
+        if j*j > i:
+            break
+
+        # 더 효율적인 방법이 있다면 dp를 업데이트 해주기 
+        
+        if dp[i] > dp[i-j*j]+1:
+            dp[i] = dp[i-j*j] + 1
+            
+print(dp[n])
+
+
+
+
+
+
+
+
+'''
+
+# 아래처럼 풀면 반례가 있다. ex)12 
+
+
+# 제곱수들을 저장하는 리스트
+
+temp = [ ]
+
+for i in range(1,318):
+    temp.append(i**2)
+
+
+# temp 뒤집기
+
+temp = list(reversed(temp))
+
+answer = 0
+
+# 범위에 맞는 제곱 수 찾기
+
+while n>=1:
+
+    for i in range(0,len(temp)):
+
+        if n>=temp[i]:          
+            n = n - temp[i]
+
+            answer+=1
+
+            break
+
+
+print(answer)
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 오르막 수
+
+# 모르겠어서 풀이를 봄.
+# 끝나는 수를 기준으로 숫자를 직접 써서 규칙을 구하면 되는 문제인데 좋은 문제인건지 억까문제인건지 좀 헷갈
+
+
+n = int(input())
+
+num = [1]*10
+
+for i in range(n-1):
+    for j in range(1, 10):
+        num[j] += num[j-1]
+
+print(sum(num)%10007)

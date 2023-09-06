@@ -1,0 +1,120 @@
+# 더 맵게
+
+# 블로그에 정리했던 heapq 문법을 참고해서 해결함
+
+
+import heapq
+
+def solution(s, K):
+    
+    answer = 0    
+    
+    heapq.heapify(s) 
+    
+    while True:
+        
+        if len(s)==1:
+            if heapq.heappop(s)>=K:
+                return answer
+            else:
+                return -1
+        
+        a = heapq.heappop(s)
+        b = heapq.heappop(s)
+        
+        
+        
+        if a>=K:
+            return answer
+        
+        answer+=1
+        
+        heapq.heappush(s,a+b*2)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 디스크 스케줄러
+
+# 풀이 참조함. 아래 처럼 로직 구현할라고 했는데 now 변수를 구하는 방법을 못찾음
+
+'''
+
+def solution(jobs):
+    answer = 0
+    
+    k = list(sorted(jobs,key = lambda x : x[1]))
+    
+    for i in range(0,len(k)):
+        
+        # 걸린 시간
+        
+        answer += (k[i][1]-k[i][0])
+        
+        # 지금 시간
+        
+        now += k[i][0]
+        
+        # 대기 시간
+        
+        # 대기 시간은 (지금 시간 -시작하려고 한 시간)
+        
+        
+        
+        
+        
+    return k
+
+
+'''
+
+
+
+
+
+
+
+
+
+
+import heapq
+
+def solution(jobs):
+    answer, now, i = 0, 0, 0
+    start = -1 
+    heap = []
+    
+    while i < len(jobs):
+        # 현재 시점에서 처리할 수 있는 작업을 heap에 저장
+        for j in jobs:
+            if start < j[0] <= now:
+                heapq.heappush(heap, [j[1], j[0]])
+        
+        if len(heap) > 0: # 처리할 작업이 있는 경우
+            cur = heapq.heappop(heap)
+            start = now
+            now += cur[0]
+            answer += now - cur[1] # 작업 요청시간부터 종료시간까지의 시간 계산
+            i +=1
+        else: # 처리할 작업이 없는 경우 다음 시간을 넘어감
+            now += 1
+                
+    return answer // len(jobs)
+    
+    

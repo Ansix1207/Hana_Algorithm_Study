@@ -1,0 +1,122 @@
+# 이친수
+
+# DP문제 - 그림을 그려보니 점화식을 발견함  
+
+
+import sys
+from itertools import product
+
+
+dp = [0] * 101
+
+dp[0] = 1
+dp[1] = 1
+dp[2] = 2
+
+for i in range(3,len(dp)):
+    dp[i] = dp[i-2] + dp[i-1]
+
+num = int(input())
+
+# 0으로 시작하지 않음 / 1이 연속으로 나오지 않음
+
+
+print(dp[num-1])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 쉬운 계단 수
+
+
+
+import sys
+from collections import deque
+
+'''
+
+# 이건 당연히 시간초과 - 걍 해봄 규칙 찾아볼라고
+
+
+
+
+
+
+# 0,9 는 1씩 커지고 나머지는 2씩 커짐
+
+temp = []
+
+for i in range(1,10):
+    temp.append(i)
+
+num = int(input())
+
+index = 1
+
+while num>index:
+
+    q = [ ]
+
+    for i in range(0,len(temp)):
+        if temp[i] == 0:
+            q.append(1)
+
+        elif temp[i] == 9:
+            q.append(8)
+            
+        else:
+            q.append(temp[i]-1)
+            q.append(temp[i]+1)
+
+    temp = q
+                    
+        
+
+    index += 1
+
+
+# 9 17 32 61 116 222 424
+
+print(len(temp)%1000000000)
+'''
+
+
+
+# 구글링한 정답 코드 - 복잡하네
+
+# 앞의 숫자가 0이거나 9면 가능한게 1개니까 그대로 숫자를 유지 해주고 그렇지 않다면 가능한 두 가지 조합을 더해준다
+
+N = int(input())
+
+dp = [[0]*10 for _ in range(N+1)]
+for i in range(1, 10):
+    dp[1][i] = 1
+
+MOD = 1000000000
+
+for i in range(2, N+1):
+    for j in range(10):
+        if j == 0:
+            dp[i][j] = dp[i-1][1]
+        elif j == 9:
+            dp[i][j] = dp[i-1][8]
+        else:
+            dp[i][j] = dp[i-1][j-1] + dp[i-1][j+1] 
+
+print(sum(dp[N]) % MOD)
+

@@ -1,0 +1,32 @@
+package BaekJoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+// TODO: 2023/08/10 1309번 동물원 (실버1) https://www.acmicpc.net/problem/1309
+// TODO: 2023/08/10 성공 
+public class boj_1309_동물원 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+
+        long[][] dp = new long[100001][3];
+        dp[1][0] = 1; //현재 칸에 사자를 두지 않는 경우
+        dp[1][1] = 1; //왼쪽 칸에 사자를 두는 경우
+        dp[1][2] = 1; //오른쪽 칸에 사자를 두는 경우
+
+        for (int i = 2; i < n + 1; i++) {
+            //i번에 사자를 아예 두지 않는 경우
+            dp[i][0] = (dp[i-1][0] + dp[i - 1][1] + dp[i - 1][2])%9901;
+            //i번에 사자를 왼쪽칸에 두는 겨웅
+            dp[i][1] = (dp[i-1][2] + dp[i-1][0])%9901;
+
+            //1번에 사자를 오른쪽에 두는 경우
+            //한칸 전에는 왼칸에 두거나, 아예 안둬야 함.
+            dp[i][2] =(dp[i-1][0] + dp[i-1][1])%9901;
+        }
+
+        System.out.println((dp[n][0] + dp[n][2] + dp[n][1])%9901);
+    }
+}

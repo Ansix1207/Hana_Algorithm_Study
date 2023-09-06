@@ -1,0 +1,52 @@
+// 프로그래머스_LV2_스택/큐_프로세스
+/*
+풀이>
+    1. priorities의 요소들을 문제에 요구하는 연산을 진행하기 위해 deque에 넣는다.
+    2. 이때, 해당 location을 표시할 수 있도록 pair을 사용해 second 요소에 0 or 1로 표시 (해당 location위치시 1로 설정)
+    3. 맨 앞의 수가 location수이고 뒤에 해당 수보다 큰 수가 없다면 answer++ 후 answer 반환
+    4. location 수가 아니면 answer++ 후 맨 앞의 수를 맨 뒤에 저장 후 맨 앞 pop
+
+*/
+
+#include <string>
+#include <vector>
+#include <deque>
+
+using namespace std;
+
+int solution(vector<int> priorities, int location) {
+    int answer = 0;
+    deque<pair<int,int>> pr;
+    
+    for (int i = 0; i<priorities.size(); i++) {
+        if (i == location ) {
+            pr.push_back(make_pair(priorities[i], 1));
+        }
+        else {
+            pr.push_back(make_pair(priorities[i], 0));
+        }
+    }
+    
+    while(1) {
+        int count = 0;
+        for(int i = 1; i<pr.size(); i++) {
+            if (pr[0].first < pr[i].first){
+                ++count;
+                break;
+            }
+        }
+        if (count == 0) {
+            ++answer;
+            if (pr[0].second == 1) {
+                return answer;
+            }
+            
+            pr.pop_front();
+        }
+        else {
+            pr.push_back(pr.front());
+            pr.pop_front();
+        }
+    }
+    return answer;
+}
